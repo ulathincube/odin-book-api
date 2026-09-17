@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String    @id @default(uuid())
+  username         String
+  fullname         String
+  email            String
+  profile          Profile?
+  posts            Post[]
+  followedBy       User[]    @relation("UserFollows")
+  following        User[]    @relation("UserFollows")
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  pinnedMessage    Message?  @relation("PinnedMessage")
+}
+
+model Profile {
+  id       String    @id @default(uuid())
+  status   String    @default("What's happening?")
+  avatar   String?
+  birthday DateTime?
+  location String?
+  user     User      @relation(fields: [userId], references: [id])
+  userId   String    @unique
+}
+
+model Post {
+  id      String   @id @default(uuid())
+  body    String
+  created DateTime @default(now())
+  likes   Int      @default(0)
+  author  User     @relation(fields: [userId], references: [id])
+  userId  String
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  body       String
+  created    DateTime
+  from       User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId   String
+  to         User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId String
+  pinnedBy   User?    @relation("PinnedMessage", fields: [pinnedById], references: [id])
+  pinnedById String?  @unique
+}
