@@ -30,3 +30,17 @@ export const CreatePost = z.object({
   body: z.string().min(10).max(200),
   authorId: z.string(),
 })
+
+// Profile Schemas
+
+export const GetProfile = z.object({
+  profileId: z.string(),
+})
+
+export const CreateProfile = z.object({
+  birthday: z.string().optional(),
+  status: z.string().min(5).max(30).optional(),
+  location: z.string().optional(),
+  avatar: z.string().optional(),
+  userId: z.string(),
+})

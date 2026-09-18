@@ -21,10 +21,10 @@ export async function getProfile(id: string) {
 }
 
 export async function createProfile({
-  birthday,
-  status,
-  location,
-  avatar,
+  birthday = "",
+  status = "",
+  location = "",
+  avatar = "",
   userId,
 }: Profile) {
   const profileObject: OptionalFields = {}
