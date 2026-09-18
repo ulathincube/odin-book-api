@@ -44,5 +44,11 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "dist/**/*",
+    "node_modules/**/*",
+    "eslint.config.ts",
+    "prisma7.config.ts"
+  ]
 }
