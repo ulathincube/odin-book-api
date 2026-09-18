@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Message" ALTER COLUMN "created" SET DEFAULT CURRENT_TIMESTAMP;

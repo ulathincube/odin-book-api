@@ -49,7 +49,7 @@ model Post {
 model Message {
   id         String   @id @default(uuid())
   body       String
-  created    DateTime
+  created    DateTime @default(now())
   from       User     @relation("SentMessages", fields: [senderId], references: [id])
   senderId   String
   to         User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
