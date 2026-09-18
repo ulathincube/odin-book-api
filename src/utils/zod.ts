@@ -44,3 +44,20 @@ export const CreateProfile = z.object({
   avatar: z.string().optional(),
   userId: z.string(),
 })
+
+// User Schemas
+
+export const GetUserById = z.object({
+  userId: z.string(),
+})
+
+export const GetUserByEmail = z.object({
+  email: z.email(),
+})
+
+export const CreateUser = z.object({
+  fullname: z.string(),
+  email: z.email(),
+  username: z.string(),
+  password: z.string(),
+})
