@@ -6,7 +6,7 @@ import { getMessage, createMessage, getAllMessages } from "../models/message.js"
 export async function getMessageController(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   try {
     const { messageId } = GetMessage.parse(req.params)
@@ -30,7 +30,7 @@ export async function getMessageController(
 export async function createMessageController(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   try {
     const { body, senderId, receiverId } = CreateMessage.parse(req.body)
@@ -49,7 +49,7 @@ export async function createMessageController(
 export async function getAllMessagesController(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   try {
     const { senderId, receiverId } = GetAllMessages.parse(req.query)
