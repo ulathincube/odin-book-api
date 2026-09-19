@@ -40,7 +40,7 @@ export async function getAllPostsController(
 
     if (allPosts.length === 0)
       return res
-        .status(404)
+        .status(200)
         .json({ error: null, data: [], message: "No posts found" })
 
     res

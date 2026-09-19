@@ -15,7 +15,27 @@ export async function getPost(id: string) {
 }
 
 export async function getAllPosts() {
-  const response = await prisma.post.findMany()
+  const response = await prisma.post.findMany({
+    select: {
+      body: true,
+      id: true,
+      created: true,
+      likes: true,
+      author: {
+        select: {
+          username: true,
+          profile: {
+            select: {
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      created: "desc",
+    },
+  })
   return response
 }
 
