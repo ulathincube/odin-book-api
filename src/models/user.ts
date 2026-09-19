@@ -37,7 +37,18 @@ export async function getUserByEmail(email: string) {
 }
 
 export async function getAllUsers() {
-  const response = await prisma.user.findMany()
+  const response = await prisma.user.findMany({
+    select: {
+      username: true,
+      id: true,
+      profile: {
+        select: {
+          status: true,
+          avatar: true,
+        },
+      },
+    },
+  })
   return response
 }
 
