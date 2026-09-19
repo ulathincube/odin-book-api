@@ -32,6 +32,16 @@ export async function getUserByEmail(email: string) {
     where: {
       email,
     },
+    select: {
+      username: true,
+      fullname: true,
+      profile: {
+        select: {
+          avatar: true,
+          status: true,
+        },
+      },
+    },
   })
   return response
 }

@@ -52,7 +52,7 @@ export const GetUserById = z.object({
 })
 
 export const GetUserByEmail = z.object({
-  email: z.email(),
+  email: z.email().optional(),
 })
 
 export const CreateUser = z.object({
