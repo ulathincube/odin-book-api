@@ -11,17 +11,13 @@ interface OptionalFields {
   avatar?: string
 }
 
-interface Profile extends OptionalFields {
-  userId: string
-}
-
 export async function getProfileController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const { profileId } = await GetProfile.parse(req.params)
+    const { profileId } = GetProfile.parse(req.params)
     const profile = await getProfile(profileId)
     if (!profile)
       return res

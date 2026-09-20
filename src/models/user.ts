@@ -33,6 +33,7 @@ export async function getUserByEmail(email: string) {
       email,
     },
     select: {
+      id: true,
       username: true,
       fullname: true,
       profile: {
