@@ -8,7 +8,7 @@ import {
 
 const router = Router()
 
-router.get("/user/:postId", getAllPostsByUserIdController)
+router.get("/user/:userId", getAllPostsByUserIdController)
 router.get("/:postId", getPostController)
 router.get("/", getAllPostsController)
 router.post("/", createPostController)

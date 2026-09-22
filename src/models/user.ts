@@ -132,3 +132,5 @@ export async function getFollowingCount(userId: string) {
   })
   return response
 }
+
+// export async getAllPostsByUserId
