@@ -10,6 +10,42 @@ export async function getPost(id: string) {
     where: {
       id,
     },
+    select: {
+      body: true,
+      created: true,
+      id: true,
+      likes: true,
+      author: {
+        select: {
+          fullname: true,
+          username: true,
+          profile: {
+            select: {
+              avatar: true,
+            },
+          },
+        },
+      },
+      comments: {
+        select: {
+          body: true,
+          id: true,
+          created: true,
+          likes: true,
+          author: {
+            select: {
+              fullname: true,
+              username: true,
+              profile: {
+                select: {
+                  avatar: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   })
   return response
 }
