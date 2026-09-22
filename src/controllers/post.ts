@@ -60,12 +60,16 @@ export async function getAllPostsByUserIdController(
   next: NextFunction
 ) {
   try {
+    console.log({ status: "RUNNING" })
     const { userId } = GetAllPostsByUserId.parse(req.params)
     const allPosts = await getAllPostsByUserId(userId)
     if (allPosts.length === 0)
       return res
         .status(404)
         .json({ error: null, data: [], message: "No posts found" })
+    res
+      .status(200)
+      .json({ error: null, data: allPosts, message: "User posts found" })
   } catch (error: unknown) {
     if (error instanceof Error) {
       const customError = new CustomError(500, error.message)

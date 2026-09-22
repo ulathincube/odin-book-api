@@ -46,6 +46,21 @@ export async function getAllPostsByUserId(id: string) {
         id,
       },
     },
+    select: {
+      id: true,
+      body: true,
+      created: true,
+      likes: true,
+      author: {
+        select: {
+          profile: {
+            select: {
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
   })
   return response
 }

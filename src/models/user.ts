@@ -18,15 +18,67 @@ export async function getUserById(id: string) {
       id,
     },
     select: {
+      id: true,
       fullname: true,
       username: true,
-      profile: true,
-      posts: true,
-      followedBy: true,
-      following: true,
-      sentMessages: true,
-      receivedMessages: true,
-      pinnedMessage: true,
+      profile: {
+        select: {
+          id: true,
+          status: true,
+          birthday: true,
+          location: true,
+          avatar: true,
+        },
+      },
+      posts: {
+        select: {
+          id: true,
+          body: true,
+          likes: true,
+          created: true,
+        },
+      },
+      followedBy: {
+        select: {
+          id: true,
+          username: true,
+          profile: {
+            select: {
+              avatar: true,
+              status: true,
+            },
+          },
+          fullname: true,
+        },
+      },
+      following: {
+        select: {
+          id: true,
+          username: true,
+          profile: {
+            select: {
+              avatar: true,
+              status: true,
+            },
+          },
+          fullname: true,
+        },
+      },
+      _count: {
+        select: {
+          followedBy: true,
+          following: true,
+        },
+      },
+      // sentMessages: {
+      //   select: {
+      //     body: true,
+      //     created: true,
+      //     id: true,
+      //   },
+      // },
+      // receivedMessages: true,
+      // pinnedMessage: true,
     },
   })
   return response
