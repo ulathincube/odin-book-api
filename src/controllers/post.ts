@@ -1,11 +1,17 @@
 import type { Request, Response, NextFunction } from "express"
 import CustomError from "../errors/customError.js"
-import { GetPost, GetAllPostsByUserId, CreatePost } from "../utils/zod.js"
+import {
+  GetPost,
+  GetAllPostsByUserId,
+  CreatePost,
+  LikePost,
+} from "../utils/zod.js"
 import {
   getPost,
   getAllPosts,
   getAllPostsByUserId,
   createPost,
+  likePost,
 } from "../models/post.js"
 
 export async function getPostController(
@@ -87,6 +93,26 @@ export async function createPostController(
     const { body, authorId } = CreatePost.parse(req.body)
     const post = await createPost({ body, authorId })
     res.status(201).json({ error: null, data: post, message: "Post created" })
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const customError = new CustomError(500, error.message)
+      next(customError)
+    }
+  }
+}
+
+export async function likePostController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { postId } = GetPost.parse(req.params)
+    const { likes } = LikePost.parse(req.body)
+    await likePost({ postId, likes })
+    return res
+      .status(200)
+      .json({ data: "Post liked", error: null, message: "Success: Post liked" })
   } catch (error: unknown) {
     if (error instanceof Error) {
       const customError = new CustomError(500, error.message)

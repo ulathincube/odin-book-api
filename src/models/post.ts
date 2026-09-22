@@ -78,3 +78,21 @@ export async function createPost({ body, authorId }: Post) {
   })
   return response
 }
+
+export async function likePost({
+  postId,
+  likes,
+}: {
+  postId: string
+  likes: number
+}) {
+  const response = await prisma.post.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      likes,
+    },
+  })
+  return response
+}

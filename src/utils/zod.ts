@@ -22,6 +22,10 @@ export const GetPost = z.object({
   postId: z.string(),
 })
 
+export const LikePost = z.object({
+  likes: z.number(),
+})
+
 export const GetAllPostsByUserId = z.object({
   userId: z.string(),
 })
