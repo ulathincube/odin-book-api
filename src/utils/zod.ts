@@ -61,3 +61,8 @@ export const CreateUser = z.object({
   username: z.string(),
   password: z.string(),
 })
+
+export const FollowUser = z.object({
+  currentUser: z.string(),
+  userToFollow: z.string(),
+})

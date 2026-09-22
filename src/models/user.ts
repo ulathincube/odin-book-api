@@ -7,6 +7,11 @@ interface User {
   fullname: string
 }
 
+interface UserFollow {
+  currentUser: string
+  userToFollow: string
+}
+
 export async function getUserById(id: string) {
   const response = await prisma.user.findUnique({
     where: {
@@ -75,6 +80,54 @@ export async function createUser({
       email,
       username,
       password,
+    },
+  })
+  return response
+}
+
+export async function followUser({ currentUser, userToFollow }: UserFollow) {
+  const response = await prisma.user.update({
+    where: {
+      id: currentUser,
+    },
+    data: {
+      following: {
+        connect: {
+          id: userToFollow,
+        },
+      },
+    },
+  })
+  return response
+}
+
+export async function getFollowersCount(userId: string) {
+  const response = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      _count: {
+        select: {
+          followedBy: true,
+        },
+      },
+    },
+  })
+  return response
+}
+
+export async function getFollowingCount(userId: string) {
+  const response = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      _count: {
+        select: {
+          following: true,
+        },
+      },
     },
   })
   return response

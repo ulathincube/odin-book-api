@@ -1,12 +1,20 @@
 import type { Request, Response, NextFunction } from "express"
 import * as z from "zod"
 import CustomError from "../errors/customError.js"
-import { GetUserByEmail, GetUserById, CreateUser } from "../utils/zod.js"
+import {
+  GetUserByEmail,
+  GetUserById,
+  CreateUser,
+  FollowUser,
+} from "../utils/zod.js"
 import {
   getUserById,
   getUserByEmail,
   getAllUsers,
   createUser,
+  followUser,
+  getFollowersCount,
+  getFollowingCount,
 } from "../models/user.js"
 
 export async function getUserByIdController(
@@ -25,7 +33,7 @@ export async function getUserByIdController(
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       const errorMessage = error.issues
-      const customError = new CustomError(500, JSON.stringify(error.issues))
+      const customError = new CustomError(500, JSON.stringify(errorMessage))
       next(customError)
     } else if (error instanceof Error) {
       const customError = new CustomError(500, error.message)
@@ -86,11 +94,86 @@ export async function createUserController(
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       const errorMessage = error.issues
-      const customError = new CustomError(500, JSON.stringify(error.issues))
+      const customError = new CustomError(500, JSON.stringify(errorMessage))
       next(customError)
     } else if (error instanceof Error) {
       const customError = new CustomError(500, error.message)
       next(customError)
+    }
+  }
+}
+
+export async function followUserController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { currentUser, userToFollow } = FollowUser.parse(req.params)
+    await followUser({ currentUser, userToFollow })
+    return res.status(200).json({
+      data: "User followed",
+      error: null,
+      message: "Success: User followed",
+    })
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = error.issues
+      const customError = new CustomError(500, JSON.stringify(errorMessage))
+      next(customError)
+    } else if (error instanceof Error) {
+      const customError = new CustomError(500, error.message)
+      next(customError)
+    }
+  }
+}
+
+export async function getFollowersCountController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { userId } = GetUserById.parse(req.params)
+    const followerCount = await getFollowersCount(userId)
+    return res.status(200).json({
+      data: followerCount,
+      error: null,
+      message: "Success: Count retrieved",
+    })
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = JSON.stringify(error.issues)
+      const erroObject = new CustomError(500, errorMessage)
+      next(erroObject)
+    } else if (error instanceof Error) {
+      const errorObject = new CustomError(500, error.message)
+      next(errorObject)
+    }
+  }
+}
+
+export async function getFollowingCountController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { userId } = GetUserById.parse(req.params)
+    const following = await getFollowingCount(userId)
+    res.status(200).json({
+      data: following,
+      error: null,
+      message: "Success: Count retrieved",
+    })
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = JSON.stringify(error.issues)
+      const erroObject = new CustomError(500, errorMessage)
+      next(erroObject)
+    } else if (error instanceof Error) {
+      const errorObject = new CustomError(500, error.message)
+      next(errorObject)
     }
   }
 }
