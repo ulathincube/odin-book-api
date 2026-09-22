@@ -137,7 +137,7 @@ export async function getFollowersCountController(
     const { userId } = GetUserById.parse(req.params)
     const followerCount = await getFollowersCount(userId)
     return res.status(200).json({
-      data: followerCount,
+      data: followerCount?._count?.followedBy,
       error: null,
       message: "Success: Count retrieved",
     })
@@ -162,7 +162,7 @@ export async function getFollowingCountController(
     const { userId } = GetUserById.parse(req.params)
     const following = await getFollowingCount(userId)
     res.status(200).json({
-      data: following,
+      data: following?._count?.following,
       error: null,
       message: "Success: Count retrieved",
     })
