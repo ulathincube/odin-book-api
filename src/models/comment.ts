@@ -32,6 +32,20 @@ export async function getAllComments(postId: string) {
         id: postId,
       },
     },
+    select: {
+      id: true,
+      body: true,
+      created: true,
+      likes: true,
+      author: {
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          fullname: true,
+        },
+      },
+    },
   })
   return response
 }
