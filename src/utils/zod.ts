@@ -70,3 +70,10 @@ export const FollowUser = z.object({
   currentUser: z.string(),
   userToFollow: z.string(),
 })
+
+// Comment Schemas
+
+export const CreateComment = z.object({
+  body: z.string(),
+  authorId: z.string(),
+})

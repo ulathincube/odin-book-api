@@ -8,6 +8,7 @@ import CustomError from "./errors/customError.js"
 import messageRouter from "./routes/message.js"
 import postRouter from "./routes/post.js"
 import profileRouter from "./routes/profile.js"
+import commentRouter from "./routes/comment.js"
 import userRouter from "./routes/user.js"
 
 if (!ORIGIN)
@@ -31,6 +32,7 @@ app.use("/api/messages", messageRouter)
 app.use("/api/posts", postRouter)
 app.use("/api/users", userRouter)
 app.use("/api/profiles", profileRouter)
+app.use("/api/comments", commentRouter)
 
 app.use("/{*splat}", notFound)
 app.use(errorHandler)
