@@ -67,6 +67,11 @@ export async function getAllPosts() {
           },
         },
       },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
     },
     orderBy: {
       created: "desc",
