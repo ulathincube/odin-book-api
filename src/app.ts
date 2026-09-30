@@ -11,12 +11,24 @@ import postRouter from "./routes/post.js"
 import profileRouter from "./routes/profile.js"
 import commentRouter from "./routes/comment.js"
 import userRouter from "./routes/user.js"
+import { Server } from "socket.io"
 
 if (!ORIGIN)
   throw new CustomError(500, "--Origin URL not provided: Server exiting--")
 
 const app = express()
 const server = createServer(app)
+const io = new Server(server)
+
+// WEBSOCKET CONNECTIONS GO HERE
+
+io.on("connection", (socket) => {
+  console.log("A user connected")
+
+  socket.on("message", (data) => {
+    console.log({ data })
+  })
+})
 
 app.use(
   cors({
