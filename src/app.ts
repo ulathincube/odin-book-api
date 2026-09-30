@@ -12,15 +12,30 @@ import profileRouter from "./routes/profile.js"
 import commentRouter from "./routes/comment.js"
 import userRouter from "./routes/user.js"
 import { Server } from "socket.io"
+import { ORIGIN } from "./utils/constants.js"
 
 if (!ORIGIN)
   throw new CustomError(500, "--Origin URL not provided: Server exiting--")
 
 const app = express()
 const server = createServer(app)
-const io = new Server(server)
 
-// WEBSOCKET CONNECTIONS GO HERE
+app.use(
+  cors({
+    origin: ORIGIN,
+    credentials: true,
+    methods: ["GET", "POST"],
+  })
+)
+
+// WEBSOCKET CONFIG GOES HERE
+
+const io = new Server(server, {
+  cors: {
+    origin: ORIGIN,
+    methods: ["GET", "POST"],
+  },
+})
 
 io.on("connection", (socket) => {
   console.log("A user connected")
@@ -30,13 +45,7 @@ io.on("connection", (socket) => {
   })
 })
 
-app.use(
-  cors({
-    origin: ORIGIN,
-    credentials: true,
-    methods: ["GET", "POST"],
-  })
-)
+// WEBSOCKET CONNECTIONS CONFIG ENDS HERE
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
