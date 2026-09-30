@@ -12,7 +12,6 @@ import profileRouter from "./routes/profile.js"
 import commentRouter from "./routes/comment.js"
 import userRouter from "./routes/user.js"
 import { Server } from "socket.io"
-import { ORIGIN } from "./utils/constants.js"
 
 if (!ORIGIN)
   throw new CustomError(500, "--Origin URL not provided: Server exiting--")

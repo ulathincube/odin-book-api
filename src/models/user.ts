@@ -36,6 +36,11 @@ export async function getUserById(id: string) {
           body: true,
           likes: true,
           created: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
         },
       },
       followedBy: {
