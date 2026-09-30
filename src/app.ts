@@ -1,4 +1,5 @@
 import express from "express"
+import { createServer } from "node:http"
 import cors from "cors"
 import morgan from "morgan"
 import { ORIGIN } from "./utils/constants.js"
@@ -15,6 +16,7 @@ if (!ORIGIN)
   throw new CustomError(500, "--Origin URL not provided: Server exiting--")
 
 const app = express()
+const server = createServer(app)
 
 app.use(
   cors({
@@ -37,4 +39,4 @@ app.use("/api/comments", commentRouter)
 app.use("/{*splat}", notFound)
 app.use(errorHandler)
 
-export default app
+export default server
