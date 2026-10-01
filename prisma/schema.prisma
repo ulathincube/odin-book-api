@@ -26,6 +26,7 @@ model User {
   receivedMessages Message[] @relation("ReceivedMessages")
   pinnedMessage    Message?  @relation("PinnedMessage")
   comments         Comment[]
+  created          DateTime  @default(now())
 }
 
 model Profile {
