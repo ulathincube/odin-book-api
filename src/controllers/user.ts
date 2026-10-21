@@ -99,7 +99,13 @@ export async function createUserController(
 ) {
   try {
     const { fullname, username, email, password } = CreateUser.parse(req.body)
-    const user = await createUser({ fullname, username, email, password })
+    const hashedPassword = await hashPassword(password)
+    const user = await createUser({
+      fullname,
+      username,
+      email,
+      password: hashedPassword,
+    })
     res.status(200).json({ error: null, data: user, message: "User created" })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
