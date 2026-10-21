@@ -6,6 +6,7 @@ import {
   GetUserById,
   CreateUser,
   FollowUser,
+  LoginUser,
 } from "../utils/zod.js"
 import {
   getUserById,
@@ -166,6 +167,32 @@ export async function getFollowingCountController(
       error: null,
       message: "Success: Count retrieved",
     })
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = JSON.stringify(error.issues)
+      const errorObject = new CustomError(500, errorMessage)
+      next(errorObject)
+    } else if (error instanceof Error) {
+      const errorObject = new CustomError(500, error.message)
+      next(errorObject)
+    }
+  }
+}
+
+export async function loginUserController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { email, password } = LoginUser.parse(req.body)
+    const user = await getUserByEmail(email)
+    if (!user)
+      return res.status(401).json({
+        data: null,
+        error: new Error("User not found"),
+        message: "User not found",
+      })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       const errorMessage = JSON.stringify(error.issues)

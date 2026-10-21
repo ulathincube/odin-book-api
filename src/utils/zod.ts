@@ -55,6 +55,11 @@ export const GetUserById = z.object({
   userId: z.string(),
 })
 
+export const LoginUser = z.object({
+  email: z.email(),
+  password: z.string(),
+})
+
 export const GetUserByEmail = z.object({
   email: z.email().optional(),
 })
