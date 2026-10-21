@@ -18,6 +18,11 @@ import {
   getFollowingCount,
 } from "../models/user.js"
 import { comparePassword, hashPassword } from "../utils/bcrypt.js"
+import jwt from "jsonwebtoken"
+import { JWT_SECRET } from "../utils/constants.js"
+
+if (!JWT_SECRET)
+  throw new CustomError(500, "--JWT Secret not provided: Server exiting--")
 
 export async function getUserByIdController(
   req: Request,
@@ -204,6 +209,14 @@ export async function loginUserController(
         error: new Error("User not found"),
         message: "User not found",
       })
+
+    const userCopy = { ...user, password: undefined }
+    const token = jwt.sign(userCopy, JWT_SECRET!, { expiresIn: "1d" })
+    res.status(200).json({
+      data: token,
+      error: null,
+      message: "Logged in successfully",
+    })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       const errorMessage = JSON.stringify(error.issues)
