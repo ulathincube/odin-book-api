@@ -32,7 +32,7 @@ model User {
 model Profile {
   id       String    @id @default(uuid())
   status   String    @default("What's happening?")
-  avatar   String?
+  avatar   String    @default("https://avatars.githubusercontent.com/u/38489243")
   birthday DateTime?
   location String?
   user     User      @relation(fields: [userId], references: [id])
