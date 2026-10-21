@@ -17,6 +17,7 @@ import {
   getFollowersCount,
   getFollowingCount,
 } from "../models/user.js"
+import { comparePassword, hashPassword } from "../utils/bcrypt.js"
 
 export async function getUserByIdController(
   req: Request,
@@ -58,9 +59,12 @@ export async function getAllUsersController(
         return res
           .status(404)
           .json({ error: null, data: null, message: "User not found" })
-      return res
-        .status(200)
-        .json({ error: null, data: user, message: "User found" })
+      else {
+        const userCopy = { ...user, password: undefined }
+        return res
+          .status(200)
+          .json({ error: null, data: userCopy, message: "User found" })
+      }
     }
 
     const allUsers = await getAllUsers()
@@ -188,6 +192,13 @@ export async function loginUserController(
     const { email, password } = LoginUser.parse(req.body)
     const user = await getUserByEmail(email)
     if (!user)
+      return res.status(401).json({
+        data: null,
+        error: new Error("User not found"),
+        message: "User not found",
+      })
+    const match = await comparePassword(password, user.password)
+    if (!match)
       return res.status(401).json({
         data: null,
         error: new Error("User not found"),

@@ -97,6 +97,7 @@ export async function getUserByEmail(email: string) {
     select: {
       id: true,
       username: true,
+      password: true,
       fullname: true,
       profile: {
         select: {
