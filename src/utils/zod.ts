@@ -64,6 +64,10 @@ export const GetUserByEmail = z.object({
   email: z.email().optional(),
 })
 
+export const DeleteUserByEmail = z.object({
+  email: z.string(),
+})
+
 export const CreateUser = z.object({
   fullname: z.string(),
   email: z.email(),

@@ -113,12 +113,19 @@ export async function getUserByEmail(email: string) {
 export async function getAllUsers() {
   const response = await prisma.user.findMany({
     select: {
-      username: true,
       id: true,
+      username: true,
+      fullname: true,
+      created: true,
       profile: {
         select: {
           status: true,
           avatar: true,
+        },
+      },
+      _count: {
+        select: {
+          followedBy: true,
         },
       },
     },
@@ -138,6 +145,12 @@ export async function createUser({
       email,
       username,
       password,
+      profile: {
+        create: {
+          avatar: "https://avatars.githubusercontent.com/u/38489243",
+          status: "What's happening?",
+        },
+      },
     },
   })
   return response
@@ -186,6 +199,15 @@ export async function getFollowingCount(userId: string) {
           following: true,
         },
       },
+    },
+  })
+  return response
+}
+
+export async function deleteUserByEmail(email: string) {
+  const response = await prisma.user.delete({
+    where: {
+      email,
     },
   })
   return response

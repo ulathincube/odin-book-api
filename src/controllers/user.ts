@@ -7,6 +7,7 @@ import {
   CreateUser,
   FollowUser,
   LoginUser,
+  DeleteUserByEmail,
 } from "../utils/zod.js"
 import {
   getUserById,
@@ -16,6 +17,7 @@ import {
   followUser,
   getFollowersCount,
   getFollowingCount,
+  deleteUserByEmail,
 } from "../models/user.js"
 import { comparePassword, hashPassword } from "../utils/bcrypt.js"
 import jwt from "jsonwebtoken"
@@ -223,6 +225,29 @@ export async function loginUserController(
       error: null,
       message: "Logged in successfully",
     })
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = JSON.stringify(error.issues)
+      const erroObject = new CustomError(500, errorMessage)
+      next(erroObject)
+    } else if (error instanceof Error) {
+      const errorObject = new CustomError(500, error.message)
+      next(errorObject)
+    }
+  }
+}
+
+export async function deleteUserByEmailController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { email } = DeleteUserByEmail.parse(req.query)
+    const user = await deleteUserByEmail(email)
+    return res
+      .status(200)
+      .json({ data: user, error: null, message: "User deleted" })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       const errorMessage = JSON.stringify(error.issues)

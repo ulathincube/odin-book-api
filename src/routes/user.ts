@@ -7,6 +7,7 @@ import {
   getFollowersCountController,
   getFollowingCountController,
   loginUserController,
+  deleteUserByEmailController,
 } from "../controllers/user.js"
 
 const router = Router()
@@ -18,5 +19,6 @@ router.get("/:userId/followers", getFollowersCountController)
 router.get("/:userId/following", getFollowingCountController)
 router.get("/:userId", getUserByIdController)
 router.get("/", getAllUsersController)
+router.delete("/", deleteUserByEmailController)
 
 export default router
