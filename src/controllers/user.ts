@@ -208,20 +208,23 @@ export async function loginUserController(
       return res.status(401).json({
         data: null,
         error: new Error("User not found"),
-        message: "User not found",
+        message: "Invalid login credentials",
       })
     const match = await comparePassword(password, user.password)
     if (!match)
       return res.status(401).json({
         data: null,
         error: new Error("User not found"),
-        message: "User not found",
+        message: "Invalid login credentials",
       })
 
     const userCopy = { ...user, password: undefined }
     const token = jwt.sign(userCopy, JWT_SECRET!, { expiresIn: "1d" })
     res.status(200).json({
-      data: token,
+      data: {
+        token,
+        user: userCopy,
+      },
       error: null,
       message: "Logged in successfully",
     })
