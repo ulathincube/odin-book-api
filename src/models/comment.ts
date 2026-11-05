@@ -6,6 +6,11 @@ interface CreateComment {
   postId: string
 }
 
+interface LikeComment {
+  commentId: string
+  likes: number
+}
+
 export async function createComment({ authorId, body, postId }: CreateComment) {
   const response = await prisma.comment.create({
     data: {
@@ -45,6 +50,18 @@ export async function getAllComments(postId: string) {
           fullname: true,
         },
       },
+    },
+  })
+  return response
+}
+
+export async function likeComment({ commentId, likes }: LikeComment) {
+  const response = await prisma.comment.update({
+    where: {
+      id: commentId,
+    },
+    data: {
+      likes,
     },
   })
   return response

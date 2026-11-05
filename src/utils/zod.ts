@@ -86,3 +86,11 @@ export const CreateComment = z.object({
   body: z.string(),
   authorId: z.string(),
 })
+
+export const GetComment = z.object({
+  commentId: z.string(),
+})
+
+export const LikeComment = z.object({
+  likes: z.number(),
+})

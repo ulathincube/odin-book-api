@@ -1,6 +1,15 @@
 import type { Request, Response, NextFunction } from "express"
-import { GetPost, CreateComment } from "../utils/zod.js"
-import { getAllComments, createComment } from "../models/comment.js"
+import {
+  GetPost,
+  CreateComment,
+  GetComment,
+  LikeComment,
+} from "../utils/zod.js"
+import {
+  getAllComments,
+  createComment,
+  likeComment,
+} from "../models/comment.js"
 
 export async function getAllCommentsController(
   req: Request,
@@ -36,5 +45,24 @@ export async function createCommentController(
     if (error instanceof Error) {
       next(error)
     }
+  }
+}
+
+export async function likeCommentController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { commentId } = GetComment.parse(req.params)
+    const { likes } = LikeComment.parse(req.body)
+    await likeComment({ commentId, likes })
+    return res.status(200).json({
+      data: "Success!",
+      error: null,
+      message: "Success!",
+    })
+  } catch (error: unknown) {
+    if (error instanceof Error) return next(error)
   }
 }
